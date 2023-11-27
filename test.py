@@ -17,4 +17,5 @@ def run(server_class=HTTPServer, handler_class=RequestHandler, port=80):
     httpd.serve_forever()
 
 if __name__ == '__main__':
+    print("Hi! \nWelcome to kubernetes, it's Ritesh")
     run()
