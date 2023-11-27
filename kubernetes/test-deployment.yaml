@@ -14,4 +14,4 @@ spec:
     spec:
       containers:
       - name: test-app
-        image: your-docker-registry/test-app:latest
+        image: 6294720479/test-app:latest
