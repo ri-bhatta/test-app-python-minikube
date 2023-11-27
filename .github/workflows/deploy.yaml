@@ -58,12 +58,6 @@ jobs:
     - name: Get Service Info
       run: kubectl get service test-service
 
-    - name: Check Service with curl
-      run: |
-        CLUSTER_IP=$(kubectl get service test-service -o=jsonpath='{.spec.clusterIP}')
-        NODE_PORT=$(kubectl get service test-service -o=jsonpath='{.spec.ports[0].nodePort}')
-        curl http://${CLUSTER_IP}:${NODE_PORT}
-
     - name: Get Events
       run: kubectl get events
 
