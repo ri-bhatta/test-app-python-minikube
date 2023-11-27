@@ -3,4 +3,5 @@ WORKDIR /app
 COPY test.py /app/test.py
 RUN useradd -m appuser
 USER appuser
-CMD ["python", "-u", "/app/test.py"]
+RUN mkdir -p /app/logs
+CMD ["python", "/app/test.py"]

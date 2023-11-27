@@ -69,7 +69,7 @@ jobs:
     - name: Pod Shell Access
       run: |
         POD_NAME=$(kubectl get pods -o jsonpath="{.items[0].metadata.name}")
-        kubectl exec -it $POD_NAME -- /bin/sh
+        kubectl exec $POD_NAME -- cat /app/logs/output.log
 
     - name: Clean up Minikube
       run: minikube stop
