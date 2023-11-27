@@ -15,3 +15,5 @@ spec:
       containers:
       - name: test-app
         image: 6294720479/test-app:latest
+        ports:
+        - containerPort: 80
