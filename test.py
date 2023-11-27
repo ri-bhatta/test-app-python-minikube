@@ -1,4 +1,4 @@
-def run(server_class=HTTPServer, handler_class=RequestHandler, port=80):
+def run():
     print("*"*31)
     print("Checking Done")
     print("*"*31)
