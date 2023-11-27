@@ -17,10 +17,12 @@ jobs:
     - name: Set up Minikube
       run: |
         minikube start --driver=docker
+
     - name: Deploy to Minikube
       run: |
         kubectl apply -f kubernetes/test-deployment.yaml
         kubectl apply -f kubernetes/test-service.yaml
+
     - name: Wait for Deployment
       run: |
         timeout=50
@@ -46,6 +48,7 @@ jobs:
           kubectl scale deployment test-deployment --replicas=1
           exit 1
         fi
+
     - name: Get Deployment Info
       run: kubectl get deployment test-deployment
 
@@ -61,7 +64,7 @@ jobs:
     - name: View Logs
       run: |
         POD_NAME=$(kubectl get pods -o jsonpath="{.items[0].metadata.name}")
-        kubectl logs $POD_NAME
-        
+        kubectl logs $POD_NAME | tail -n 20  # Display the last 20 lines of logs
+
     - name: Clean up Minikube
       run: minikube stop
