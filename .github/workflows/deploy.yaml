@@ -24,7 +24,22 @@ jobs:
         kubectl apply -f kubernetes/test-service.yaml
 
     - name: Wait for Deployment
-      run: kubectl rollout status deployment/test-deployment
+      run: |
+        timeout=600
+        interval=10
+        start=$(date +%s)
+        while [[ $(date +%s) -lt $((start + timeout)) ]]; do
+          replicas=$(kubectl get deployment test-deployment -o=jsonpath='{.status.availableReplicas}')
+          updated_replicas=$(kubectl get deployment test-deployment -o=jsonpath='{.status.updatedReplicas}')
+          echo "Waiting for deployment rollout to finish: ${updated_replicas:-0} out of ${replicas:-0} updated replicas are available..."
+          if [[ $replicas -gt 0 && $replicas == $updated_replicas ]]; then
+            echo "Deployment successfully rolled out!"
+            exit 0
+          fi
+          sleep $interval
+        done
+        echo "Error: Deployment rollout did not finish within the timeout"
+        exit 1
 
     - name: Get Deployment Info
       run: kubectl get deployment test-deployment
