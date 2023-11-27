@@ -25,7 +25,7 @@ jobs:
 
     - name: Wait for Deployment
       run: |
-        timeout=600
+        timeout=150
         interval=10
         start=$(date +%s)
         while [[ $(date +%s) -lt $((start + timeout)) ]]; do
@@ -34,12 +34,20 @@ jobs:
           echo "Waiting for deployment rollout to finish: ${updated_replicas:-0} out of ${replicas:-0} updated replicas are available..."
           if [[ $replicas -gt 0 && $replicas == $updated_replicas ]]; then
             echo "Deployment successfully rolled out!"
-            exit 0
+            break
           fi
           sleep $interval
         done
-        echo "Error: Deployment rollout did not finish within the timeout"
-        exit 1
+        if [[ $replicas -gt 0 && $replicas != $updated_replicas ]]; then
+          echo "Error: Deployment rollout did not finish within the timeout"
+          echo "Getting more information..."
+          kubectl describe deployment test-deployment
+          kubectl describe pods
+          kubectl logs -f deployment/test-deployment
+          kubectl scale deployment test-deployment --replicas=0
+          kubectl scale deployment test-deployment --replicas=1
+          exit 1
+        fi
 
     - name: Get Deployment Info
       run: kubectl get deployment test-deployment
