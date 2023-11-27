@@ -1,3 +1,5 @@
+# kubernetes/test-deployment.yaml
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,15 +19,3 @@ spec:
         image: 6294720479/test-app:latest
         ports:
         - containerPort: 80
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 80
-          initialDelaySeconds: 5
-          periodSeconds: 5
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 5
